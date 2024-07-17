@@ -1,43 +1,78 @@
-import TimeSeries from "../components/TimeSeries.tsx";
+import TimeSeries from "../islands/TimeSeries.tsx";
 import {
   Dataset,
-  get4xxSeriesConfig,
-  get5xxSeriesConfig,
-  getDemoStoreData,
+  getMedianSeriesConfig,
+  getP90SeriesConfig,
+  getP95SeriesConfig,
   getReleasesOptionsConfig,
-  getRequestsSeriesConfig,
   Series,
 } from "../utils/charts.ts";
+import { HyperdxData } from "../loaders/Hyperdx.ts";
 
-const getRequestsChartData = (hyperDxData: any): Dataset => {
+function formatDate(date: Date): string {
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+  const month = months[date.getMonth()];
+  const day = date.getDate();
+  let hours = date.getHours();
+  const minutes = date.getMinutes();
+  const seconds = date.getSeconds();
+  const ampm = hours >= 12 ? "PM" : "AM";
+
+  hours = hours % 12;
+  hours = hours ? hours : 12; // the hour '0' should be '12'
+
+  const minutesStr = minutes < 10 ? "0" + minutes : minutes;
+  const secondsStr = seconds < 10 ? "0" + seconds : seconds;
+
+  return `${month} ${day} ${hours}:${minutesStr}:${secondsStr} ${ampm}`;
+}
+
+const getRequestsChartData = (hyperDxData: HyperdxData[]): Dataset => {
   const dayDuration = 24 * 60 * 60 * 1000;
-  
+
   const isDarkMode = false;
   const now = new Date();
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   return hyperDxData && hyperDxData.length > 0
     ? {
-      categories: hyperDxData.map((item: any) => item.date).reverse(),
+      categories: hyperDxData.map((item) => {
+        const date = new Date(item.date);
+        return formatDate(date);
+      }).reverse(),
       series: [
         {
-          label: "Total Requests",
-          values: hyperDxData.map((item: any) => item.requests)
+          label: "Median",
+          values: hyperDxData
+            .map((item) => Number(item.latency.p50.toFixed(2)))
             .reverse(),
-          seriesConfig: getRequestsSeriesConfig(isDarkMode),
+          seriesConfig: getMedianSeriesConfig(isDarkMode),
         } as Series,
         {
-          label: "Warnings 4xx",
+          label: "P90",
           values: hyperDxData
-            .map((item: any) => item.count4xx)
+            .map((item) => Number(item.latency.p90.toFixed(2)))
             .reverse(),
-          seriesConfig: get4xxSeriesConfig(isDarkMode),
+          seriesConfig: getP90SeriesConfig(isDarkMode),
         } as Series,
         {
-          label: "Errors 5xx",
+          label: "P95",
           values: hyperDxData
-            .map((item: any) => item.count5xx)
+            .map((item) => Number(item.latency.p95.toFixed(2)))
             .reverse(),
-          seriesConfig: get5xxSeriesConfig(isDarkMode),
+          seriesConfig: getP95SeriesConfig(isDarkMode),
         } as Series,
       ],
     }
@@ -53,23 +88,29 @@ const getRequestsChartData = (hyperDxData: any): Dataset => {
         {
           label: "a",
           values: Array.from({ length: 30 }, () => 0),
-          seriesConfig: get4xxSeriesConfig(isDarkMode),
+          seriesConfig: getP90SeriesConfig(isDarkMode),
         } as Series,
       ],
     };
 };
 
-export default function PlotData() {
-  const chartData = getRequestsChartData(getDemoStoreData());
+interface Props {
+  data: HyperdxData[];
+}
+
+export default function PlotData(props: Props) {
+  const chartData = getRequestsChartData(props.data);
   const optionsConfig = getReleasesOptionsConfig(
     chartData,
-    true,
+    false,
   );
   return (
-    <TimeSeries
-      dataset={chartData}
-      class="h-[236px] pt-4"
-      optionsConfig={optionsConfig}
-    />
+    <div class="w-[1200px] h-[600px]">
+      <TimeSeries
+        dataset={chartData}
+        class="h-[236px] pt-4"
+        optionsConfig={optionsConfig}
+      />
+    </div>
   );
 }

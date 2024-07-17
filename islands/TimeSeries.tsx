@@ -1,5 +1,5 @@
-import ChartIsland from "../islands/Chart.tsx";
-import { Dataset, formatDay } from "../utils/charts.ts";
+import ChartIsland from "./Chart.tsx";
+import { Dataset } from "../utils/charts.ts";
 import { useMemo } from "preact/hooks";
 
 export interface Props {
@@ -7,13 +7,14 @@ export interface Props {
   class?: string;
   // deno-lint-ignore no-explicit-any
   optionsConfig?: any;
+  // deno-lint-ignore no-explicit-any
   plugins?: any;
 }
 
 export default function TimeSeries(
   { dataset, class: _class, optionsConfig, plugins }: Props,
 ) {
-  const labels = useMemo(() => dataset.categories.map(formatDay), [
+  const labels = useMemo(() => dataset.categories, [
     dataset.categories,
   ]);
 

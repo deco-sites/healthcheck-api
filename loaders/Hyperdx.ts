@@ -1,57 +1,60 @@
 const HYPERDX_APIKEY = Deno.env.get("HYPERDX_APIKEY");
 
-const path =
-  `https://api.hyperdx.io/api/v1/charts/series`;
+const path = `https://api.hyperdx.io/api/v1/charts/series`;
 const SECOND = 1000;
 const MINUTE = 60 * SECOND;
 const HOUR = 60 * MINUTE;
-const DAY = 24 * HOUR;
 
-const getRequestBody = ({ startTime, endTime, granularity } : 
-  {startTime: number, endTime: number, granularity?: string}) => {
+const getRequestBody = (
+  { startTime, endTime, granularity }: {
+    startTime: number;
+    endTime: number;
+    granularity?: string;
+  },
+) => {
   return {
     "series": [
       {
         "dataSource": "events",
         "aggFn": "count",
         "where": "vtexcommercestable -fastly.decocache",
-        "groupBy": ["level"]
+        "groupBy": ["level"],
       },
       {
         "dataSource": "events",
         "aggFn": "p50",
         "field": "duration",
         "where": "vtexcommercestable -fastly.decocache",
-        "groupBy": ["level"]
+        "groupBy": ["level"],
       },
       {
         "dataSource": "events",
         "aggFn": "p90",
         "field": "duration",
         "where": "vtexcommercestable -fastly.decocache",
-        "groupBy": ["level"]
+        "groupBy": ["level"],
       },
       {
         "dataSource": "events",
         "aggFn": "p95",
         "field": "duration",
         "where": "vtexcommercestable -fastly.decocache",
-        "groupBy": ["level"]
+        "groupBy": ["level"],
       },
       {
         "dataSource": "events",
         "aggFn": "p99",
         "field": "duration",
         "where": "vtexcommercestable -fastly.decocache",
-        "groupBy": ["level"]
+        "groupBy": ["level"],
       },
     ],
     "endTime": endTime,
     "startTime": startTime,
     "granularity": granularity ?? "1 hour",
-    "seriesReturnType": "column"
+    "seriesReturnType": "column",
   };
-}
+};
 
 export interface HyperdxData {
   date: number;
@@ -72,10 +75,10 @@ export default async function loader(): Promise<HyperdxData[]> {
     method: "POST",
     body: JSON.stringify(
       getRequestBody({
-        "startTime": new Date().getTime() - 2 * HOUR,
+        "startTime": new Date().getTime() - HOUR,
         "endTime": new Date().getTime(),
-        "granularity": "15 minute",
-      })
+        "granularity": "1 minute",
+      }),
     ),
     headers: {
       "Authorization": `Bearer ${HYPERDX_APIKEY}`,
@@ -83,8 +86,7 @@ export default async function loader(): Promise<HyperdxData[]> {
     },
   });
   const data = await response.json();
-  console.log(data);
-  const map = new Map<number,HyperdxData> ();
+  const map = new Map<number, HyperdxData>();
   data.data?.forEach((item) => {
     const time = item.ts_bucket, level = item.group[0];
     const count = item["series_0.data"];
@@ -109,14 +111,16 @@ export default async function loader(): Promise<HyperdxData[]> {
       if (old == 0) {
         return new_;
       }
-      return level == "ok" ?
-        (old * requests.error + new_ * requests.ok) / (requests.ok + requests.error) :
-        (old * requests.ok + new_ * requests.error) / (requests.ok + requests.error);
+      return level == "ok"
+        ? (old * requests.error + new_ * requests.ok) /
+          (requests.ok + requests.error)
+        : (old * requests.ok + new_ * requests.error) /
+          (requests.ok + requests.error);
     };
     map.get(time)!.latency.p50 = getBalancedMetric(oldLatency.p50, p50);
     map.get(time)!.latency.p90 = getBalancedMetric(oldLatency.p90, p90);
     map.get(time)!.latency.p95 = getBalancedMetric(oldLatency.p95, p95);
     map.get(time)!.latency.p99 = getBalancedMetric(oldLatency.p99, p99);
   });
-  return Array.from(map.values());
+  return Array.from(map.values()).reverse();
 }
