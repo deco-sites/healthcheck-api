@@ -40,36 +40,40 @@ function formatDate(date: Date): string {
   return `${month} ${day} ${hours}:${minutesStr}:${secondsStr} ${ampm}`;
 }
 
-const getRequestsChartData = (hyperDxData: HyperdxData[]): Dataset => {
+interface Props {
+  data: HyperdxData[];
+}
+
+export function loader ({ data } : Props): Dataset {
   const dayDuration = 24 * 60 * 60 * 1000;
 
   const isDarkMode = false;
   const now = new Date();
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  return hyperDxData && hyperDxData.length > 0
+  return data && data.length > 0
     ? {
-      categories: hyperDxData.map((item) => {
+      categories: data.map((item) => {
         const date = new Date(item.date);
         return formatDate(date);
       }).reverse(),
       series: [
         {
           label: "Median",
-          values: hyperDxData
+          values: data
             .map((item) => Number(item.latency.p50.toFixed(2)))
             .reverse(),
           seriesConfig: getMedianSeriesConfig(isDarkMode),
         } as Series,
         {
           label: "P90",
-          values: hyperDxData
+          values: data
             .map((item) => Number(item.latency.p90.toFixed(2)))
             .reverse(),
           seriesConfig: getP90SeriesConfig(isDarkMode),
         } as Series,
         {
           label: "P95",
-          values: hyperDxData
+          values: data
             .map((item) => Number(item.latency.p95.toFixed(2)))
             .reverse(),
           seriesConfig: getP95SeriesConfig(isDarkMode),
@@ -94,12 +98,7 @@ const getRequestsChartData = (hyperDxData: HyperdxData[]): Dataset => {
     };
 };
 
-interface Props {
-  data: HyperdxData[];
-}
-
-export default function PlotData(props: Props) {
-  const chartData = getRequestsChartData(props.data);
+export default function PlotData(chartData: Dataset) {
   const optionsConfig = getReleasesOptionsConfig(
     chartData,
     false,
