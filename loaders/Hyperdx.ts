@@ -75,7 +75,7 @@ export default async function loader(): Promise<HyperdxData[]> {
     method: "POST",
     body: JSON.stringify(
       getRequestBody({
-        "startTime": new Date().getTime() - HOUR,
+        "startTime": new Date().getTime() - 2 * HOUR,
         "endTime": new Date().getTime(),
         "granularity": "1 minute",
       }),
@@ -87,7 +87,8 @@ export default async function loader(): Promise<HyperdxData[]> {
   });
   const data = await response.json();
   const map = new Map<number, HyperdxData>();
-  data.data?.forEach((item) => {
+  // deno-lint-ignore no-explicit-any
+  data.data?.forEach((item: { [x: string]: any; ts_bucket: any; group: any[]; }) => {
     const time = item.ts_bucket, level = item.group[0];
     const count = item["series_0.data"];
     const p50 = item["series_1.data"];

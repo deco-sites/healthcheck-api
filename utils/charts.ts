@@ -1,3 +1,5 @@
+import { HyperdxData } from "site/loaders/Hyperdx.ts";
+
 // deno-lint-ignore-file
 export interface SeriesConfig {
   borderColor?: string;
@@ -111,7 +113,7 @@ export function formatNumber(value: string | number, digits = 1): string {
     : "0";
 }
 
-export const getReleasesOptionsConfig = (
+export const getHyperdxOptionsConfig = (
   dataset: Dataset,
   isDarkMode: boolean,
 ) => {
@@ -189,6 +191,22 @@ export const getReleasesOptionsConfig = (
   };
 };
 
+export const getP99SeriesConfig = (isDarkMode: boolean): SeriesConfig => {
+  return {
+    borderColor: isDarkMode ? "rgb(225, 130, 107)" : "rgb(182, 66, 37)",
+    borderWidth: 2,
+    pointBackgroundColor: isDarkMode
+      ? "rgb(225, 130, 107)"
+      : "rgb(176, 59, 30)",
+    pointBorderColor: isDarkMode ? "rgb(225, 130, 107)" : "rgb(176, 59, 30)",
+    lineTension: 0.5,
+    segment: {
+      borderColor: isDarkMode ? "rgb(225, 130, 107)" : "rgb(182, 66, 37)",
+      borderDash: [6, 0],
+    },
+  };
+};
+
 export const getP95SeriesConfig = (isDarkMode: boolean): SeriesConfig => {
   return {
     borderColor: isDarkMode ? "rgb(225, 130, 107)" : "rgb(182, 66, 37)",
@@ -236,3 +254,94 @@ export const getMedianSeriesConfig = (isDarkMode: boolean) => {
     },
   };
 };
+
+function formatDate(date: Date): string {
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+  const month = months[date.getMonth()];
+  const day = date.getDate();
+  let hours = date.getHours();
+  const minutes = date.getMinutes();
+  const seconds = date.getSeconds();
+  const ampm = hours >= 12 ? "PM" : "AM";
+
+  hours = hours % 12;
+  hours = hours ? hours : 12; // the hour '0' should be '12'
+
+  const minutesStr = minutes < 10 ? "0" + minutes : minutes;
+  const secondsStr = seconds < 10 ? "0" + seconds : seconds;
+
+  return `    ${month} ${day} ${hours}:${minutesStr}:${secondsStr} ${ampm}    `;
+}
+
+export const getDatasetFromHyperdxData = (data: HyperdxData[], isDarkMode: boolean) => {
+  const dayDuration = 24 * 60 * 60 * 1000;
+
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  return data && data.length > 0
+    ? {
+      categories: data.map((item) => {
+        const date = new Date(item.date);
+        return formatDate(date);
+      }).reverse(),
+      series: [
+        {
+          label: "Median",
+          values: data
+            .map((item) => Number(item.latency.p50.toFixed(2)))
+            .reverse(),
+          seriesConfig: getMedianSeriesConfig(isDarkMode),
+        } as Series,
+        {
+          label: "P90",
+          values: data
+            .map((item) => Number(item.latency.p90.toFixed(2)))
+            .reverse(),
+          seriesConfig: getP90SeriesConfig(isDarkMode),
+        } as Series,
+        {
+          label: "P95",
+          values: data
+            .map((item) => Number(item.latency.p95.toFixed(2)))
+            .reverse(),
+          seriesConfig: getP95SeriesConfig(isDarkMode),
+        } as Series,
+        {
+          label: "P99",
+          values: data
+            .map((item) => Number(item.latency.p99.toFixed(2)))
+            .reverse(),
+          seriesConfig: getP95SeriesConfig(isDarkMode),
+        } as Series,
+      ],
+    }
+    : {
+      categories: Array.from(
+        { length: 30 },
+        (_, i) =>
+          new Date(today.getTime() - i * dayDuration).toISOString().split(
+            "T",
+          )[0],
+      ).reverse(),
+      series: [
+        {
+          label: "a",
+          values: Array.from({ length: 30 }, () => 0),
+          seriesConfig: getP90SeriesConfig(isDarkMode),
+        } as Series,
+      ],
+    };
+}
