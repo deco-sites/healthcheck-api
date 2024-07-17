@@ -12,7 +12,7 @@ import {
 const getRequestsChartData = (hyperDxData: any): Dataset => {
   const dayDuration = 24 * 60 * 60 * 1000;
   
-  const isDarkMode = true;
+  const isDarkMode = false;
   const now = new Date();
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   return hyperDxData && hyperDxData.length > 0

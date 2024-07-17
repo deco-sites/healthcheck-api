@@ -428,11 +428,16 @@ export const getBillingSeriesConfig = (
 
 const commonOptions = (isDarkMode: boolean) => {
   return {
+    elements: {
+      point:{
+        radius: 0
+      }
+    },
     scales: {
       x: {
         beginAtZero: true,
         grid: {
-          display: true,
+          display: false,
           color: (ctx: any) => {
             const totalTicks = ctx.scale.ticks.length;
             if (
@@ -452,6 +457,7 @@ const commonOptions = (isDarkMode: boolean) => {
       y: {
         beginAtZero: true,
         grid: {
+          display:true,
           color: "rgb(128, 145, 145)",
         },
         ticks: {
@@ -558,7 +564,7 @@ export const get5xxSeriesConfig = (isDarkMode: boolean): SeriesConfig => {
       ? "rgb(225, 130, 107)"
       : "rgb(176, 59, 30)",
     pointBorderColor: isDarkMode ? "rgb(225, 130, 107)" : "rgb(176, 59, 30)",
-    lineTension: 0.1,
+    lineTension: 0.5,
     segment: {
       borderColor: isDarkMode ? "rgb(225, 130, 107)" : "rgb(182, 66, 37)",
       borderDash: [6, 0],
@@ -574,7 +580,7 @@ export const get4xxSeriesConfig = (isDarkMode: boolean): SeriesConfig => {
       ? "rgb(246, 213, 121)"
       : "rgb(145, 110, 13)",
     pointBorderColor: isDarkMode ? "rgb(246, 213, 121)" : "rgb(145, 110, 13)",
-    lineTension: 0.1,
+    lineTension: 0.5,
     segment: {
       borderColor: isDarkMode ? "rgb(246, 213, 121)" : "rgb(153, 115, 11)",
       borderDash: [6, 0],
@@ -590,7 +596,7 @@ export const getRequestsSeriesConfig = (isDarkMode: boolean) => {
       ? "rgb(102, 158, 255)"
       : "rgb(40, 103, 212)",
     pointBorderColor: isDarkMode ? "rgb(102, 158, 255)" : "rgb(40, 103, 212)",
-    lineTension: 0.1,
+    lineTension: 0.5,
     segment: {
       borderColor: isDarkMode ? "rgb(102, 158, 255)" : "rgb(48, 110, 217)",
       borderDash: [6, 0],
