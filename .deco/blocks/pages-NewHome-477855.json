@@ -1,0 +1,22 @@
+{
+  "name": "NewHome",
+  "path": "/",
+  "sections": [
+    {
+      "__resolveType": "site/sections/PlotData.tsx",
+      "data": {
+        "__resolveType": "site/loaders/Hyperdx.ts",
+        "granularity": "1 minute",
+        "timeRange": "2",
+        "apiKey": "a471b49f-933d-4a77-ace8-cc47c703c25b"
+      }
+    },
+    {
+      "__resolveType": "site/sections/DesignSystem.tsx"
+    }
+  ],
+  "seo": {
+    "__resolveType": "website/sections/Seo/SeoV2.tsx"
+  },
+  "__resolveType": "website/pages/Page.tsx"
+}
