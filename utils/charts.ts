@@ -1,6 +1,6 @@
+// deno-lint-ignore-file no-explicit-any
 import { HyperdxData } from "site/loaders/Hyperdx.ts";
 
-// deno-lint-ignore-file
 export interface SeriesConfig {
   borderColor?: string;
   borderWidth?: number;
@@ -114,7 +114,6 @@ export function formatNumber(value: string | number, digits = 1): string {
 }
 
 export const getHyperdxOptionsConfig = (
-  dataset: Dataset,
   isDarkMode: boolean,
 ) => {
   return {
@@ -162,9 +161,6 @@ export const getHyperdxOptionsConfig = (
             family: "sans-serif",
           },
           color: isDarkMode ? "#FAFAFA" : "#0D1717",
-          callback: function (value: any, index: any, ticks: any) {
-            return "$AAAAA";
-          },
         },
       },
     },
@@ -286,7 +282,10 @@ function formatDate(date: Date): string {
   return `    ${month} ${day} ${hours}:${minutesStr}:${secondsStr} ${ampm}    `;
 }
 
-export const getDatasetFromHyperdxData = (data: HyperdxData[], isDarkMode: boolean) => {
+export const getDatasetFromHyperdxData = (
+  data: HyperdxData[],
+  isDarkMode: boolean,
+) => {
   const dayDuration = 24 * 60 * 60 * 1000;
 
   const now = new Date();
@@ -344,4 +343,4 @@ export const getDatasetFromHyperdxData = (data: HyperdxData[], isDarkMode: boole
         } as Series,
       ],
     };
-}
+};

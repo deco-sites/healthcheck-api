@@ -7,6 +7,5 @@
  * after: <div class={clx(display && 'flex', 'flex-col bg-white')}>
  */
 export const clx = (
-    ...args: (string | undefined | null | false | "")[]
-  ): string => args.filter(Boolean).join(" ");
-  
+  ...args: (string | undefined | null | false | "")[]
+): string => args.filter(Boolean).join(" ");

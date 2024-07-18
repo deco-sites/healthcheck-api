@@ -1,3 +1,4 @@
+// deno-lint-ignore-file no-explicit-any
 const HYPERDX_APIKEY = Deno.env.get("HYPERDX_APIKEY");
 
 const path = `https://api.hyperdx.io/api/v1/charts/series`;
@@ -87,41 +88,42 @@ export default async function loader(): Promise<HyperdxData[]> {
   });
   const data = await response.json();
   const map = new Map<number, HyperdxData>();
-  // deno-lint-ignore no-explicit-any
-  data.data?.forEach((item: { [x: string]: any; ts_bucket: any; group: any[]; }) => {
-    const time = item.ts_bucket, level = item.group[0];
-    const count = item["series_0.data"];
-    const p50 = item["series_1.data"];
-    const p90 = item["series_2.data"];
-    const p95 = item["series_3.data"];
-    const p99 = item["series_4.data"];
-    if (!map.has(time)) {
-      map.set(time, {
-        date: time,
-        requests: { ok: 0, error: 0 },
-        latency: { p50: 0, p90: 0, p95: 0, p99: 0 },
-      });
-    }
-
-    map.get(time)!.requests[level as "ok" | "error"] = count;
-
-    const oldLatency = map.get(time)!.latency;
-    const requests = map.get(time)!.requests;
-
-    const getBalancedMetric = (old: number, new_: number) => {
-      if (old == 0) {
-        return new_;
+  data.data?.forEach(
+    (item: { [x: string]: any; ts_bucket: any; group: any[] }) => {
+      const time = item.ts_bucket, level = item.group[0];
+      const count = item["series_0.data"];
+      const p50 = item["series_1.data"];
+      const p90 = item["series_2.data"];
+      const p95 = item["series_3.data"];
+      const p99 = item["series_4.data"];
+      if (!map.has(time)) {
+        map.set(time, {
+          date: time,
+          requests: { ok: 0, error: 0 },
+          latency: { p50: 0, p90: 0, p95: 0, p99: 0 },
+        });
       }
-      return level == "ok"
-        ? (old * requests.error + new_ * requests.ok) /
-          (requests.ok + requests.error)
-        : (old * requests.ok + new_ * requests.error) /
-          (requests.ok + requests.error);
-    };
-    map.get(time)!.latency.p50 = getBalancedMetric(oldLatency.p50, p50);
-    map.get(time)!.latency.p90 = getBalancedMetric(oldLatency.p90, p90);
-    map.get(time)!.latency.p95 = getBalancedMetric(oldLatency.p95, p95);
-    map.get(time)!.latency.p99 = getBalancedMetric(oldLatency.p99, p99);
-  });
+
+      map.get(time)!.requests[level as "ok" | "error"] = count;
+
+      const oldLatency = map.get(time)!.latency;
+      const requests = map.get(time)!.requests;
+
+      const getBalancedMetric = (old: number, new_: number) => {
+        if (old == 0) {
+          return new_;
+        }
+        return level == "ok"
+          ? (old * requests.error + new_ * requests.ok) /
+            (requests.ok + requests.error)
+          : (old * requests.ok + new_ * requests.error) /
+            (requests.ok + requests.error);
+      };
+      map.get(time)!.latency.p50 = getBalancedMetric(oldLatency.p50, p50);
+      map.get(time)!.latency.p90 = getBalancedMetric(oldLatency.p90, p90);
+      map.get(time)!.latency.p95 = getBalancedMetric(oldLatency.p95, p95);
+      map.get(time)!.latency.p99 = getBalancedMetric(oldLatency.p99, p99);
+    },
+  );
   return Array.from(map.values()).reverse();
 }

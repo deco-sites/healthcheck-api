@@ -600,6 +600,7 @@ const snippet = () => {
   };
 
   document.getElementById("theme-switcher")?.addEventListener("change", (e) => {
+    // deno-lint-ignore no-explicit-any
     const selected = (e.target as any)?.selectedOptions[0].value as string;
     applyTheme(selected);
   });
