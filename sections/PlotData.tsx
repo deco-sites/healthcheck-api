@@ -7,6 +7,8 @@ import {
 import Text from "../components/ui/Text.tsx";
 import { HyperdxData } from "../loaders/Hyperdx.ts";
 
+const isDarkMode = true;
+
 interface LoaderProps {
   data: HyperdxData[];
 }
@@ -78,7 +80,7 @@ export function loader({ data }: LoaderProps): ComponentProps {
   };
 
   return {
-    dataset: getDatasetFromHyperdxData(data.slice(0, 60), false),
+    dataset: getDatasetFromHyperdxData(data.slice(0, 60), isDarkMode),
     percentilErrors,
     p50Latency,
     p90Latency,
@@ -91,9 +93,8 @@ export default function PlotData(
   { dataset, percentilErrors, p50Latency, p90Latency, p95Latency, p99Latency }:
     ComponentProps,
 ) {
-  console.log(dataset);
   const optionsConfig = getHyperdxOptionsConfig(
-    false,
+    isDarkMode,
   );
   const MetricCard = (
     { title, lastHour, twoHoursAgo }: {
@@ -125,7 +126,7 @@ export default function PlotData(
     </div>
   );
   return (
-    <div class="bg-base-000 p-40 flex flex-col gap-8">
+    <div class="bg-base-000 px-[100px] py-20 flex flex-col gap-8">
       <div class="justify-center w-full">
         <Text variant="hero-large">
           Healthcheck apis
@@ -140,7 +141,7 @@ export default function PlotData(
             <div class="flex flex-col gap-6 p-4">
               <Text variant="heading">Status</Text>
               <Text variant="hero-large" class="text-decorative-one-900">
-                Active
+                Fully operational
               </Text>
             </div>
           </div>

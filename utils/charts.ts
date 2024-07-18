@@ -189,15 +189,15 @@ export const getHyperdxOptionsConfig = (
 
 export const getP99SeriesConfig = (isDarkMode: boolean): SeriesConfig => {
   return {
-    borderColor: isDarkMode ? "rgb(225, 130, 107)" : "rgb(182, 66, 37)",
+    borderColor: isDarkMode ? "#02F67C" : "#27AE6B",
     borderWidth: 2,
     pointBackgroundColor: isDarkMode
-      ? "rgb(225, 130, 107)"
-      : "rgb(176, 59, 30)",
-    pointBorderColor: isDarkMode ? "rgb(225, 130, 107)" : "rgb(176, 59, 30)",
+      ? "#02F67C"
+      : "#27AE6B",
+    pointBorderColor: isDarkMode ? "#02F67C" : "#27AE6B",
     lineTension: 0.5,
     segment: {
-      borderColor: isDarkMode ? "rgb(225, 130, 107)" : "rgb(182, 66, 37)",
+      borderColor: isDarkMode ? "#02F67C" : "#27AE6B",
       borderDash: [6, 0],
     },
   };
@@ -205,15 +205,15 @@ export const getP99SeriesConfig = (isDarkMode: boolean): SeriesConfig => {
 
 export const getP95SeriesConfig = (isDarkMode: boolean): SeriesConfig => {
   return {
-    borderColor: isDarkMode ? "rgb(225, 130, 107)" : "rgb(182, 66, 37)",
+    borderColor: isDarkMode ? "#02F67C" : "#27AE6B",
     borderWidth: 2,
     pointBackgroundColor: isDarkMode
-      ? "rgb(225, 130, 107)"
-      : "rgb(176, 59, 30)",
-    pointBorderColor: isDarkMode ? "rgb(225, 130, 107)" : "rgb(176, 59, 30)",
+      ? "#02F67C"
+      : "#27AE6B",
+    pointBorderColor: isDarkMode ? "#02F67C" : "#27AE6B",
     lineTension: 0.5,
     segment: {
-      borderColor: isDarkMode ? "rgb(225, 130, 107)" : "rgb(182, 66, 37)",
+      borderColor: isDarkMode ? "#02F67C" : "#27AE6B",
       borderDash: [6, 0],
     },
   };
@@ -221,15 +221,15 @@ export const getP95SeriesConfig = (isDarkMode: boolean): SeriesConfig => {
 
 export const getP90SeriesConfig = (isDarkMode: boolean): SeriesConfig => {
   return {
-    borderColor: isDarkMode ? "rgb(246, 213, 121)" : "rgb(153, 115, 11)",
+    borderColor: isDarkMode ? "#02F67C" : "#27AE6B",
     borderWidth: 2,
     pointBackgroundColor: isDarkMode
-      ? "rgb(246, 213, 121)"
-      : "rgb(145, 110, 13)",
-    pointBorderColor: isDarkMode ? "rgb(246, 213, 121)" : "rgb(145, 110, 13)",
+      ? "#02F67C"
+      : "#27AE6B",
+    pointBorderColor: isDarkMode ? "#02F67C" : "#27AE6B",
     lineTension: 0.5,
     segment: {
-      borderColor: isDarkMode ? "rgb(246, 213, 121)" : "rgb(153, 115, 11)",
+      borderColor: isDarkMode ? "#02F67C" : "#27AE6B",
       borderDash: [6, 0],
     },
   };
@@ -237,15 +237,15 @@ export const getP90SeriesConfig = (isDarkMode: boolean): SeriesConfig => {
 
 export const getMedianSeriesConfig = (isDarkMode: boolean) => {
   return {
-    borderColor: isDarkMode ? "rgb(102, 158, 255)" : "rgb(48, 110, 217)",
+    borderColor: isDarkMode ? "#02F67C" : "#27AE6B",
     borderWidth: 2,
     pointBackgroundColor: isDarkMode
-      ? "rgb(102, 158, 255)"
-      : "rgb(40, 103, 212)",
-    pointBorderColor: isDarkMode ? "rgb(102, 158, 255)" : "rgb(40, 103, 212)",
+      ? "#02F67C"
+      : "#27AE6B",
+    pointBorderColor: isDarkMode ? "#02F67C" : "#27AE6B",
     lineTension: 0.5,
     segment: {
-      borderColor: isDarkMode ? "rgb(102, 158, 255)" : "rgb(48, 110, 217)",
+      borderColor: isDarkMode ? "#02F67C" : "#27AE6B",
       borderDash: [6, 0],
     },
   };
