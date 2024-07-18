@@ -90,9 +90,10 @@ export interface HyperdxData {
 interface Props {
   granularity?: Granularity;
   timeRange?: "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10";
+  apiKey?: string;
 }
 
-export default async function loader({ granularity, timeRange }: Props): Promise<HyperdxData[]> {
+export default async function loader({ granularity, timeRange, apiKey }: Props): Promise<HyperdxData[]> {
   const response = await fetch(encodeURI(path), {
     method: "POST",
     body: JSON.stringify(
@@ -103,7 +104,7 @@ export default async function loader({ granularity, timeRange }: Props): Promise
       }),
     ),
     headers: {
-      "Authorization": `Bearer ${HYPERDX_APIKEY}`,
+      "Authorization": `Bearer ${apiKey}`,
       "Content-Type": "application/json",
     },
   });
