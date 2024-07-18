@@ -91,6 +91,7 @@ export default function PlotData(
   { dataset, percentilErrors, p50Latency, p90Latency, p95Latency, p99Latency }:
     ComponentProps,
 ) {
+  console.log(dataset);
   const optionsConfig = getHyperdxOptionsConfig(
     false,
   );

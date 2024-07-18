@@ -6,11 +6,27 @@ const SECOND = 1000;
 const MINUTE = 60 * SECOND;
 const HOUR = 60 * MINUTE;
 
+export type Granularity =
+  | "30 second"
+  | "1 minute"
+  | "5 minute"
+  | "10 minute"
+  | "15 minute"
+  | "30 minute"
+  | "1 hour"
+  | "2 hour"
+  | "6 hour"
+  | "12 hour"
+  | "1 day"
+  | "2 day"
+  | "7 day"
+  | "30 day";
+
 const getRequestBody = (
   { startTime, endTime, granularity }: {
     startTime: number;
     endTime: number;
-    granularity?: string;
+    granularity?: Granularity;
   },
 ) => {
   return {
@@ -52,7 +68,7 @@ const getRequestBody = (
     ],
     "endTime": endTime,
     "startTime": startTime,
-    "granularity": granularity ?? "1 hour",
+    "granularity": granularity ?? "1 minute",
     "seriesReturnType": "column",
   };
 };
@@ -71,14 +87,19 @@ export interface HyperdxData {
   };
 }
 
-export default async function loader(): Promise<HyperdxData[]> {
+interface Props {
+  granularity?: Granularity;
+  timeRange?: "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10";
+}
+
+export default async function loader({ granularity, timeRange }: Props): Promise<HyperdxData[]> {
   const response = await fetch(encodeURI(path), {
     method: "POST",
     body: JSON.stringify(
       getRequestBody({
-        "startTime": new Date().getTime() - 2 * HOUR,
+        "startTime": new Date().getTime() - (Number(timeRange) ?? 2) * HOUR,
         "endTime": new Date().getTime(),
-        "granularity": "1 minute",
+        "granularity": granularity,
       }),
     ),
     headers: {
