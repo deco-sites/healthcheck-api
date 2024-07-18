@@ -142,8 +142,12 @@
     "blockType": "sections",
     "__resolveType": "site/sections/PlotData.tsx"
   },
-  "/.deco/blocks/pages-home-5afd25174424.json": {
-    "name": "Home",
+  "/.deco/blocks/Preview%20site%2Floaders%2FHyperdx.ts.json": {
+    "blockType": "loaders",
+    "__resolveType": "site/loaders/Hyperdx.ts"
+  },
+  "/.deco/blocks/pages-NewHome-287114.json": {
+    "name": "NewHome",
     "path": "/",
     "blockType": "pages",
     "__resolveType": "website/pages/Page.tsx"
