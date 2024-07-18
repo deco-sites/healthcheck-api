@@ -6,6 +6,7 @@ import {
 } from "../utils/charts.ts";
 import Text from "../components/ui/Text.tsx";
 import { HyperdxData } from "../loaders/Hyperdx.ts";
+import { SectionCard } from "../components/SectionCard.tsx";
 
 const isDarkMode = true;
 
@@ -126,7 +127,7 @@ export default function PlotData(
     </div>
   );
   return (
-    <div class="bg-base-000 px-[100px] py-20 flex flex-col gap-8">
+    <div class="bg-base-000 px-[200px] py-20 flex flex-col gap-8">
       <div class="justify-center w-full">
         <Text variant="hero-large">
           Healthcheck apis
@@ -178,11 +179,17 @@ export default function PlotData(
             twoHoursAgo={`${p99Latency.twoHoursAgo.toFixed(2)}ms`}
           />
         </div>
-        <div class="pr-5 w-full h-[450px]">
-          <TimeSeries
-            dataset={dataset}
-            class="h-[400px] pt-4"
-            optionsConfig={optionsConfig}
+        <div class="w-full h-[450px]">
+          <SectionCard 
+            title="Latency"
+            description="Latency in milliseconds for VTEX requests passing through deco."
+            children={
+              <TimeSeries
+                dataset={dataset}
+                class="h-[400px] pt-4"
+                optionsConfig={optionsConfig}
+              />
+            }
           />
         </div>
       </div>
