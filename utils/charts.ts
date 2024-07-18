@@ -129,17 +129,7 @@ export const getHyperdxOptionsConfig = (
       x: {
         grid: {
           display: true,
-          color: (ctx: any) => {
-            const totalTicks = ctx.scale.ticks.length;
-            if (
-              ctx.tick.value === ctx.scale.ticks[0].value ||
-              ctx.tick.value === ctx.scale.ticks[totalTicks - 1].value
-            ) {
-              return "rgb(128, 145, 145)";
-            } else {
-              return "transparent";
-            }
-          },
+          color: "rgb(128, 145, 145)",
         },
         ticks: {
           font: {

@@ -1,5 +1,5 @@
 // deno-lint-ignore-file no-explicit-any
-const HYPERDX_APIKEY = Deno.env.get("HYPERDX_APIKEY");
+import { Secret } from "apps/website/loaders/secret.ts";
 
 const path = `https://api.hyperdx.io/api/v1/charts/series`;
 const SECOND = 1000;
@@ -90,7 +90,7 @@ export interface HyperdxData {
 interface Props {
   granularity?: Granularity;
   timeRange?: "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10";
-  apiKey?: string;
+  apiKey?: Secret;
 }
 
 export default async function loader({ granularity, timeRange, apiKey }: Props): Promise<HyperdxData[]> {
@@ -104,7 +104,7 @@ export default async function loader({ granularity, timeRange, apiKey }: Props):
       }),
     ),
     headers: {
-      "Authorization": `Bearer ${apiKey}`,
+      "Authorization": `Bearer ${apiKey?.get()}`,
       "Content-Type": "application/json",
     },
   });
