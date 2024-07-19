@@ -7,12 +7,15 @@ import {
 import Text from "../components/ui/Text.tsx";
 import { HyperdxData } from "../loaders/Hyperdx.ts";
 import { SectionCard } from "../components/SectionCard.tsx";
+import Image from "apps/website/components/Image.tsx";
+import Icon from "../components/ui/Icon.tsx";
 
 
 const isDarkMode = true;
 
 interface LoaderProps {
   data: HyperdxData[];
+  imgSrc: string;
 }
 
 interface CompareMetric {
@@ -27,9 +30,10 @@ interface ComponentProps {
   p90Latency: CompareMetric;
   p95Latency: CompareMetric;
   p99Latency: CompareMetric;
+  imgSrc: string;
 }
 
-export function loader({ data }: LoaderProps): ComponentProps {
+export function loader({ data, imgSrc }: LoaderProps): ComponentProps {
   const errorsLastHour = data.slice(0, 60).reduce(
     (acc, item) => acc + item.requests.error,
     0,
@@ -82,6 +86,7 @@ export function loader({ data }: LoaderProps): ComponentProps {
   };
 
   return {
+    imgSrc,
     dataset: getDatasetFromHyperdxData(data.slice(0, 60), isDarkMode),
     percentilErrors,
     p50Latency,
@@ -92,105 +97,126 @@ export function loader({ data }: LoaderProps): ComponentProps {
 }
 
 export default function PlotData(
-  { dataset, percentilErrors, p50Latency, p90Latency, p95Latency, p99Latency }:
+  { imgSrc, dataset, percentilErrors: _percentilErrors, p50Latency, p90Latency, p95Latency, p99Latency }:
     ComponentProps,
 ) {
   const optionsConfig = getHyperdxOptionsConfig(
     isDarkMode,
   );
   const MetricCard = (
-    { title, lastHour, twoHoursAgo }: {
-      title: string;
-      lastHour: string;
-      twoHoursAgo: string;
+    { description, data, lastData }: {
+      description: string;
+      data: number;
+      lastData: number;
     },
-  ) => (
-    <div class="flex-1 bg-base-200 rounded-2xl">
-      <div class="flex flex-col gap-3 p-4">
-        <Text variant="heading">{title}</Text>
-        <div class="flex gap-2">
-          <Text variant="hero-small">
-            Last hour:
-          </Text>
-          <Text variant="hero-medium" class="text-decorative-one-900">
-            {lastHour}
-          </Text>
-        </div>
-        <div class="flex gap-2">
-          <Text variant="hero-small">
-            Two hours ago:
-          </Text>
-          <Text variant="hero-medium" class="text-decorative-one-900">
-            {twoHoursAgo}
+  ) => {
+    const increase = data > lastData;
+    const percent = ((data - lastData) / lastData * 100).toFixed(0);
+    return (
+      <div class="flex flex-col gap-2 p-4 bg-base-100 rounded-lg w-[200px]">
+        <Text variant="body-regular">{description}</Text>
+        <Text variant="display">
+          {data.toFixed(2)}ms
+        </Text>
+        <div class="flex flex-row gap-1">
+          <Icon 
+            id={increase ? "trending-up" : "trending-down"} 
+            size={16} 
+            class={`${increase ? "text-critical-900" : "text-positive-900"}`} 
+          />
+          <Text variant="body-regular-10" tone={increase ? "critical-900" : "positive-900"}>
+            {percent}% {increase ? "more" : "less"} than 2 hours ago
           </Text>
         </div>
       </div>
-    </div>
-  );
+    );
+  }
   return (
-    <div class="bg-base-000 px-[200px] py-20 flex flex-col gap-8">
-      <div class="justify-center w-full">
-        <Text variant="hero-large">
-          Healthcheck apis
+    <div class="bg-base-000 px-[120px] py-10 flex flex-col gap-6">
+      <div class="flex flex-row justify-between">
+        <Text variant="hero-large" class="!font-normal">
+          API Healthcheck
         </Text>
+        <div class="flex gap-1 items-center">
+          <Text variant="body-regular-10" tone="base-700">
+            Powered by
+          </Text>
+          <Icon
+            id="deco-cx"
+            width={40}
+            height={11}
+            class="text-base-700"
+          />
+        </div>
       </div>
-      <div class="flex flex-col gap-2">
-        <Text variant="hero-small">
-          VTEX
-        </Text>
-        <div class="flex gap-4">
-          <div class="flex-1 bg-base-200 rounded-2xl">
-            <div class="flex flex-col gap-6 p-4">
-              <Text variant="heading">Status</Text>
-              <Text variant="hero-large" class="text-decorative-one-900">
-                Fully operational
+      <div class="flex flex-row w-full justify-between items-center">
+        <div class="flex flex-row gap-3 h-12">
+          <Image
+            src={imgSrc}
+            class="rounded-lg"
+            width={48}
+            height={48}
+          />
+          <div class="flex flex-col">
+            <Text variant="heading" class="!font-medium">
+              VTEX
+            </Text>
+            <a href="https://status.vtex.com/">
+              <Text variant="body-regular">
+                https://status.vtex.com/
               </Text>
-            </div>
+            </a>
           </div>
-          <MetricCard
-            title="Errors"
-            lastHour={`${(percentilErrors.lastHour * 100).toFixed(3)}%`}
-            twoHoursAgo={`${(percentilErrors.twoHoursAgo * 100).toFixed(3)}%`}
+        </div>
+        <div class="flex flex-col gap-2 bg-positive-100 rounded-lg p-4 w-full max-w-[200px]">
+          <Text variant="body-regular">
+            Status
+          </Text>
+          <div class="flex flex-row gap-2 items-center">
+            <Icon id="circle-check" size={16} class="text-positive-800" />
+            <Text variant="body-strong" tone="positive-900">
+              Fully operational
+            </Text>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex flex-row gap-10 max-h-[500px]">
+        <div class="flex flex-col gap-4 w-full">
+          <div class="flex flex-col">
+            <Text variant="heading" class="!font-normal">
+              Latency
+            </Text>
+            <Text tone="base-500" variant="body-regular">
+              Latency in miliseconds for VTEX requests passing through deco.cx
+            </Text>
+          </div>
+          <TimeSeries
+            dataset={dataset}
+            class="h-[400px] w-full h-full"
+            optionsConfig={optionsConfig}
           />
         </div>
-        <Text variant="hero-medium">
-          Latency
-        </Text>
-        <div class="flex flex-wrap gap-4">
+        <div class="flex flex-col gap-4">
           <MetricCard
-            title="P50"
-            lastHour={`${p50Latency.lastHour.toFixed(2)}ms`}
-            twoHoursAgo={`${p50Latency.twoHoursAgo.toFixed(2)}ms`}
+            description="Latency P50"
+            data={p50Latency.lastHour}
+            lastData={p50Latency.twoHoursAgo}
           />
           <MetricCard
-            title="P90"
-            lastHour={`${p90Latency.lastHour.toFixed(2)}ms`}
-            twoHoursAgo={`${p90Latency.twoHoursAgo.toFixed(2)}ms`}
-          />
-        </div>
-        <div class="flex flex-wrap gap-4">
-          <MetricCard
-            title="P95"
-            lastHour={`${p95Latency.lastHour.toFixed(2)}ms`}
-            twoHoursAgo={`${p95Latency.twoHoursAgo.toFixed(2)}ms`}
+            description="Latency P90"
+            data={p90Latency.lastHour}
+            lastData={p90Latency.twoHoursAgo}
           />
           <MetricCard
-            title="P99"
-            lastHour={`${p99Latency.lastHour.toFixed(2)}ms`}
-            twoHoursAgo={`${p99Latency.twoHoursAgo.toFixed(2)}ms`}
+            description="Latency P95"
+            data={p95Latency.lastHour}
+            lastData={p95Latency.twoHoursAgo}
           />
-        </div>
-        <div class="w-full h-[450px]">
-          <SectionCard 
-            title="Latency"
-            description="Latency in milliseconds for VTEX requests passing through deco."
-            children={
-              <TimeSeries
-                dataset={dataset}
-                class="h-[400px] pt-4"
-                optionsConfig={optionsConfig}
-              />
-            }
+          <MetricCard
+            description="Latency P99"
+            data={p99Latency.lastHour}
+            lastData={p99Latency.twoHoursAgo}
           />
         </div>
       </div>

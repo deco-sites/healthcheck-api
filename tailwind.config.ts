@@ -66,6 +66,7 @@ export default {
         "body-regular": ["12px", "20px"],
         "caption-strong": ["12px", "20px"],
         "caption-regular": ["12px", "20px"],
+        "body-regular-10": ["10px", "14px"],
 
         "xs": ".75rem", // 75% of the base font size
         "sm": ".875rem", // 87.5% of the base font size
@@ -90,6 +91,7 @@ export default {
         "body-regular": 400,
         "caption-strong": 500,
         "caption-regular": 400,
+        "body-regular-10": 400,
       },
       boxShadow: {
         // TODO: Stop using this shadow
