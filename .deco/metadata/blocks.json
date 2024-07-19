@@ -151,5 +151,11 @@
     "path": "/",
     "blockType": "pages",
     "__resolveType": "website/pages/Page.tsx"
+  },
+  "/.deco/blocks/pages-Dev-819774.json": {
+    "name": "Dev",
+    "path": "/dev",
+    "blockType": "pages",
+    "__resolveType": "website/pages/Page.tsx"
   }
 }
