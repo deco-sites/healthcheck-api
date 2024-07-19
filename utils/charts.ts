@@ -129,7 +129,8 @@ export const getHyperdxOptionsConfig = (
       x: {
         grid: {
           display: true,
-          color: "rgb(128, 145, 145)",
+          color: "#303d3d",
+          tickBorderDash: [6, 4],
         },
         ticks: {
           font: {
@@ -137,20 +138,21 @@ export const getHyperdxOptionsConfig = (
           },
           autoSkip: true,
           maxRotation: 0,
-          color: isDarkMode ? "#FAFAFA" : "#0D1717",
+          color: isDarkMode ? "#AFB6B6" : "#0D1717",
         },
       },
       y: {
         beginAtZero: true,
         grid: {
           display: true,
-          color: "rgb(128, 145, 145)",
+          color: "#303d3d",
         },
         ticks: {
           font: {
             family: "sans-serif",
           },
-          color: isDarkMode ? "#FAFAFA" : "#0D1717",
+          color: isDarkMode ? "#AFB6B6" : "#0D1717",
+          callback: formatNumber,
         },
       },
     },
@@ -179,15 +181,15 @@ export const getHyperdxOptionsConfig = (
 
 export const getP99SeriesConfig = (isDarkMode: boolean): SeriesConfig => {
   return {
-    borderColor: isDarkMode ? "#02F67C" : "#27AE6B",
+    borderColor: isDarkMode ? "#FFA300" : "#27AE6B",
     borderWidth: 2,
     pointBackgroundColor: isDarkMode
-      ? "#02F67C"
+      ? "#FFA300"
       : "#27AE6B",
-    pointBorderColor: isDarkMode ? "#02F67C" : "#27AE6B",
+    pointBorderColor: isDarkMode ? "#FFA300" : "#27AE6B",
     lineTension: 0.5,
     segment: {
-      borderColor: isDarkMode ? "#02F67C" : "#27AE6B",
+      borderColor: isDarkMode ? "#FFA300" : "#27AE6B",
       borderDash: [6, 0],
     },
   };
@@ -195,15 +197,15 @@ export const getP99SeriesConfig = (isDarkMode: boolean): SeriesConfig => {
 
 export const getP95SeriesConfig = (isDarkMode: boolean): SeriesConfig => {
   return {
-    borderColor: isDarkMode ? "#02F67C" : "#27AE6B",
+    borderColor: isDarkMode ? "#FF6E6E" : "#27AE6B",
     borderWidth: 2,
     pointBackgroundColor: isDarkMode
-      ? "#02F67C"
+      ? "#FF6E6E"
       : "#27AE6B",
-    pointBorderColor: isDarkMode ? "#02F67C" : "#27AE6B",
+    pointBorderColor: isDarkMode ? "#FF6E6E" : "#27AE6B",
     lineTension: 0.5,
     segment: {
-      borderColor: isDarkMode ? "#02F67C" : "#27AE6B",
+      borderColor: isDarkMode ? "#FF6E6E" : "#27AE6B",
       borderDash: [6, 0],
     },
   };
@@ -211,15 +213,15 @@ export const getP95SeriesConfig = (isDarkMode: boolean): SeriesConfig => {
 
 export const getP90SeriesConfig = (isDarkMode: boolean): SeriesConfig => {
   return {
-    borderColor: isDarkMode ? "#02F67C" : "#27AE6B",
+    borderColor: isDarkMode ? "#2FD080" : "#27AE6B",
     borderWidth: 2,
     pointBackgroundColor: isDarkMode
-      ? "#02F67C"
+      ? "#2FD080"
       : "#27AE6B",
-    pointBorderColor: isDarkMode ? "#02F67C" : "#27AE6B",
+    pointBorderColor: isDarkMode ? "#2FD080" : "#27AE6B",
     lineTension: 0.5,
     segment: {
-      borderColor: isDarkMode ? "#02F67C" : "#27AE6B",
+      borderColor: isDarkMode ? "#2FD080" : "#27AE6B",
       borderDash: [6, 0],
     },
   };
@@ -227,15 +229,15 @@ export const getP90SeriesConfig = (isDarkMode: boolean): SeriesConfig => {
 
 export const getMedianSeriesConfig = (isDarkMode: boolean) => {
   return {
-    borderColor: isDarkMode ? "#02F67C" : "#27AE6B",
+    borderColor: isDarkMode ? "#7857FF" : "#27AE6B",
     borderWidth: 2,
     pointBackgroundColor: isDarkMode
-      ? "#02F67C"
+      ? "#7857FF"
       : "#27AE6B",
-    pointBorderColor: isDarkMode ? "#02F67C" : "#27AE6B",
+    pointBorderColor: isDarkMode ? "#7857FF" : "#27AE6B",
     lineTension: 0.5,
     segment: {
-      borderColor: isDarkMode ? "#02F67C" : "#27AE6B",
+      borderColor: isDarkMode ? "#7857FF" : "#27AE6B",
       borderDash: [6, 0],
     },
   };
@@ -313,7 +315,7 @@ export const getDatasetFromHyperdxData = (
           values: data
             .map((item) => Number(item.latency.p99.toFixed(2)))
             .reverse(),
-          seriesConfig: getP95SeriesConfig(isDarkMode),
+          seriesConfig: getP99SeriesConfig(isDarkMode),
         } as Series,
       ],
     }

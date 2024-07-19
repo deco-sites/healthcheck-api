@@ -104,17 +104,25 @@ export default function PlotData(
     isDarkMode,
   );
   const MetricCard = (
-    { description, data, lastData }: {
+    { description, data, lastData, class: _IconClass }: {
       description: string;
       data: number;
       lastData: number;
+      class: string;
     },
   ) => {
     const increase = data > lastData;
-    const percent = ((data - lastData) / lastData * 100).toFixed(0);
+    const percent = (Math.abs((data - lastData) / lastData * 100)).toFixed(0);
     return (
       <div class="flex flex-col gap-2 p-4 bg-base-100 rounded-lg w-[200px]">
-        <Text variant="body-regular">{description}</Text>
+        <div class="flex flex-row gap-1 items-center">
+          <Icon
+            id="status-dot"
+            size={16}
+            class={_IconClass}
+          />
+          <Text variant="body-regular">{description}</Text>
+        </div>
         <Text variant="display">
           {data.toFixed(2)}ms
         </Text>
@@ -202,21 +210,25 @@ export default function PlotData(
             description="Latency P50"
             data={p50Latency.lastHour}
             lastData={p50Latency.twoHoursAgo}
+            class="text-[#7857FF]"
           />
           <MetricCard
             description="Latency P90"
             data={p90Latency.lastHour}
             lastData={p90Latency.twoHoursAgo}
+            class="text-[#2FD080]"
           />
           <MetricCard
             description="Latency P95"
             data={p95Latency.lastHour}
             lastData={p95Latency.twoHoursAgo}
+            class="text-[#FF6E6E]"
           />
           <MetricCard
             description="Latency P99"
             data={p99Latency.lastHour}
             lastData={p99Latency.twoHoursAgo}
+            class="text-[#FFA300]"
           />
         </div>
       </div>

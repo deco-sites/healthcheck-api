@@ -47,7 +47,8 @@ export type AvailableIcons =
   | "trending-down"
   | "trending-up"
   | "circle-check"
-  | "deco-cx";
+  | "deco-cx"
+  | "status-dot";
 
 interface Props extends JSX.SVGAttributes<SVGSVGElement> {
   /**
