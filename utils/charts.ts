@@ -183,9 +183,7 @@ export const getP99SeriesConfig = (isDarkMode: boolean): SeriesConfig => {
   return {
     borderColor: isDarkMode ? "#FFA300" : "#27AE6B",
     borderWidth: 2,
-    pointBackgroundColor: isDarkMode
-      ? "#FFA300"
-      : "#27AE6B",
+    pointBackgroundColor: isDarkMode ? "#FFA300" : "#27AE6B",
     pointBorderColor: isDarkMode ? "#FFA300" : "#27AE6B",
     lineTension: 0.5,
     segment: {
@@ -199,9 +197,7 @@ export const getP95SeriesConfig = (isDarkMode: boolean): SeriesConfig => {
   return {
     borderColor: isDarkMode ? "#FF6E6E" : "#27AE6B",
     borderWidth: 2,
-    pointBackgroundColor: isDarkMode
-      ? "#FF6E6E"
-      : "#27AE6B",
+    pointBackgroundColor: isDarkMode ? "#FF6E6E" : "#27AE6B",
     pointBorderColor: isDarkMode ? "#FF6E6E" : "#27AE6B",
     lineTension: 0.5,
     segment: {
@@ -215,9 +211,7 @@ export const getP90SeriesConfig = (isDarkMode: boolean): SeriesConfig => {
   return {
     borderColor: isDarkMode ? "#2FD080" : "#27AE6B",
     borderWidth: 2,
-    pointBackgroundColor: isDarkMode
-      ? "#2FD080"
-      : "#27AE6B",
+    pointBackgroundColor: isDarkMode ? "#2FD080" : "#27AE6B",
     pointBorderColor: isDarkMode ? "#2FD080" : "#27AE6B",
     lineTension: 0.5,
     segment: {
@@ -231,9 +225,7 @@ export const getMedianSeriesConfig = (isDarkMode: boolean) => {
   return {
     borderColor: isDarkMode ? "#7857FF" : "#27AE6B",
     borderWidth: 2,
-    pointBackgroundColor: isDarkMode
-      ? "#7857FF"
-      : "#27AE6B",
+    pointBackgroundColor: isDarkMode ? "#7857FF" : "#27AE6B",
     pointBorderColor: isDarkMode ? "#7857FF" : "#27AE6B",
     lineTension: 0.5,
     segment: {

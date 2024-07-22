@@ -3,6 +3,7 @@ import Text from "./ui/Text.tsx";
 export interface SectionCardProps {
   title?: string;
   description?: string;
+  // deno-lint-ignore no-explicit-any
   children?: any;
 }
 

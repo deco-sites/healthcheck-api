@@ -6,10 +6,8 @@ import {
 } from "../utils/charts.ts";
 import Text from "../components/ui/Text.tsx";
 import { HyperdxData } from "../loaders/Hyperdx.ts";
-import { SectionCard } from "../components/SectionCard.tsx";
 import Image from "apps/website/components/Image.tsx";
 import Icon from "../components/ui/Icon.tsx";
-
 
 const isDarkMode = true;
 
@@ -25,80 +23,109 @@ interface CompareMetric {
 
 interface ComponentProps {
   dataset: Dataset;
-  percentilErrors: CompareMetric;
   p50Latency: CompareMetric;
   p90Latency: CompareMetric;
   p95Latency: CompareMetric;
   p99Latency: CompareMetric;
   imgSrc: string;
+  status: "operational" | "degraded";
 }
 
 export function loader({ data, imgSrc }: LoaderProps): ComponentProps {
-  const errorsLastHour = data.slice(0, 60).reduce(
-    (acc, item) => acc + item.requests.error,
+  const totalRequestsLastHour = data.slice(0, 60).reduce(
+    (acc, item) => acc + item.requests.ok + item.requests.error,
     0,
   );
-  const requestsLastHour = data.slice(0, 60).reduce(
-    (acc, item) => acc + item.requests.ok,
+  const totalRequestsTwoHoursAgo = data.slice(60, 120).reduce(
+    (acc, item) => acc + item.requests.ok + item.requests.error,
     0,
   );
-
-  const errorsTwoHoursAgo = data.slice(60, 120).reduce(
-    (acc, item) => acc + item.requests.error,
-    0,
-  );
-  const requestsTwoHoursAgo = data.slice(60, 120).reduce(
-    (acc, item) => acc + item.requests.ok,
+  const totalRequestsFiveMinutes = data.slice(0, 5).reduce(
+    (acc, item) => acc + item.requests.ok + item.requests.error,
     0,
   );
 
-  const percentilErrors: CompareMetric = {
-    lastHour: errorsLastHour / (errorsLastHour + requestsLastHour),
-    twoHoursAgo: errorsTwoHoursAgo / (errorsTwoHoursAgo + requestsTwoHoursAgo),
-  };
+  const fiveMinutesLatency = data.slice(0, 5).reduce(
+    (acc, item) =>
+      acc + item.latency.p50 * (item.requests.ok + item.requests.error),
+    0,
+  ) / totalRequestsFiveMinutes;
 
   const p50Latency: CompareMetric = {
-    lastHour:
-      data.slice(0, 60).reduce((acc, item) => acc + item.latency.p50, 0) / 60,
-    twoHoursAgo:
-      data.slice(60, 120).reduce((acc, item) => acc + item.latency.p50, 0) / 60,
+    lastHour: data.slice(0, 60).reduce(
+      (acc, item) =>
+        acc + item.latency.p50 * (item.requests.ok + item.requests.error),
+      0,
+    ) / totalRequestsLastHour,
+    twoHoursAgo: data.slice(60, 120).reduce(
+      (acc, item) =>
+        acc + item.latency.p50 * (item.requests.ok + item.requests.error),
+      0,
+    ) / totalRequestsTwoHoursAgo,
   };
 
   const p90Latency: CompareMetric = {
-    lastHour:
-      data.slice(0, 60).reduce((acc, item) => acc + item.latency.p90, 0) / 60,
-    twoHoursAgo:
-      data.slice(60, 120).reduce((acc, item) => acc + item.latency.p90, 0) / 60,
+    lastHour: data.slice(0, 60).reduce(
+      (acc, item) =>
+        acc + item.latency.p90 * (item.requests.ok + item.requests.error),
+      0,
+    ) / totalRequestsLastHour,
+    twoHoursAgo: data.slice(60, 120).reduce(
+      (acc, item) =>
+        acc + item.latency.p90 * (item.requests.ok + item.requests.error),
+      0,
+    ) / totalRequestsTwoHoursAgo,
   };
 
   const p95Latency: CompareMetric = {
-    lastHour:
-      data.slice(0, 60).reduce((acc, item) => acc + item.latency.p95, 0) / 60,
-    twoHoursAgo:
-      data.slice(60, 120).reduce((acc, item) => acc + item.latency.p95, 0) / 60,
+    lastHour: data.slice(0, 60).reduce(
+      (acc, item) =>
+        acc + item.latency.p95 * (item.requests.ok + item.requests.error),
+      0,
+    ) / totalRequestsLastHour,
+    twoHoursAgo: data.slice(60, 120).reduce(
+      (acc, item) =>
+        acc + item.latency.p95 * (item.requests.ok + item.requests.error),
+      0,
+    ) / totalRequestsTwoHoursAgo,
   };
 
   const p99Latency: CompareMetric = {
-    lastHour:
-      data.slice(0, 60).reduce((acc, item) => acc + item.latency.p99, 0) / 60,
-    twoHoursAgo:
-      data.slice(60, 120).reduce((acc, item) => acc + item.latency.p99, 0) / 60,
+    lastHour: data.slice(0, 60).reduce(
+      (acc, item) =>
+        acc + item.latency.p99 * (item.requests.ok + item.requests.error),
+      0,
+    ) / totalRequestsLastHour,
+    twoHoursAgo: data.slice(60, 120).reduce(
+      (acc, item) =>
+        acc + item.latency.p99 * (item.requests.ok + item.requests.error),
+      0,
+    ) / totalRequestsTwoHoursAgo,
   };
 
   return {
     imgSrc,
     dataset: getDatasetFromHyperdxData(data.slice(0, 60), isDarkMode),
-    percentilErrors,
     p50Latency,
     p90Latency,
     p95Latency,
     p99Latency,
+    status: fiveMinutesLatency / p50Latency.lastHour > 1.5
+      ? "degraded"
+      : "operational",
   };
 }
 
 export default function PlotData(
-  { imgSrc, dataset, percentilErrors: _percentilErrors, p50Latency, p90Latency, p95Latency, p99Latency }:
-    ComponentProps,
+  {
+    imgSrc,
+    dataset,
+    p50Latency,
+    p90Latency,
+    p95Latency,
+    p99Latency,
+    status,
+  }: ComponentProps,
 ) {
   const optionsConfig = getHyperdxOptionsConfig(
     isDarkMode,
@@ -127,18 +154,21 @@ export default function PlotData(
           {data.toFixed(2)}ms
         </Text>
         <div class="flex flex-row gap-1">
-          <Icon 
-            id={increase ? "trending-up" : "trending-down"} 
-            size={16} 
-            class={`${increase ? "text-critical-900" : "text-positive-900"}`} 
+          <Icon
+            id={increase ? "trending-up" : "trending-down"}
+            size={16}
+            class={`${increase ? "text-critical-900" : "text-positive-900"}`}
           />
-          <Text variant="body-regular-10" tone={increase ? "critical-900" : "positive-900"}>
+          <Text
+            variant="body-regular-10"
+            tone={increase ? "critical-900" : "positive-900"}
+          >
             {percent}% {increase ? "more" : "less"} than 2 hours ago
           </Text>
         </div>
       </div>
     );
-  }
+  };
   return (
     <div class="bg-base-000 px-[120px] py-10 flex flex-col gap-6">
       <div class="flex flex-row justify-between">
@@ -176,14 +206,27 @@ export default function PlotData(
             </a>
           </div>
         </div>
-        <div class="flex flex-col gap-2 bg-positive-100 rounded-lg p-4 w-full max-w-[200px]">
+        <div
+          class={`flex flex-col gap-2 rounded-lg p-4 w-full max-w-[200px] ${
+            status === "operational" ? "bg-positive-100" : "bg-critical-100"
+          }`}
+        >
           <Text variant="body-regular">
             Status
           </Text>
           <div class="flex flex-row gap-2 items-center">
-            <Icon id="circle-check" size={16} class="text-positive-800" />
-            <Text variant="body-strong" tone="positive-900">
-              Fully operational
+            <Icon
+              id={status === "operational" ? "circle-check" : "alert-circle"}
+              size={16}
+              class={status === "operational"
+                ? "text-positive-800"
+                : "text-critical-900"}
+            />
+            <Text
+              variant="body-strong"
+              tone={status === "operational" ? "positive-900" : "critical-900"}
+            >
+              {status === "operational" ? "Fully operational" : "Degraded"}
             </Text>
           </div>
         </div>

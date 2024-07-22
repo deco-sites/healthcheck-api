@@ -93,7 +93,9 @@ interface Props {
   apiKey?: Secret;
 }
 
-export default async function loader({ granularity, timeRange, apiKey }: Props): Promise<HyperdxData[]> {
+export default async function loader(
+  { granularity, timeRange, apiKey }: Props,
+): Promise<HyperdxData[]> {
   const response = await fetch(encodeURI(path), {
     method: "POST",
     body: JSON.stringify(
