@@ -23,7 +23,7 @@ export default function ApiDashboard ({ dataset, p50Latency, p90Latency, p95Late
     isDarkMode,
   );
   return (
-    <div class="flex flex-col gap-4 w-full h-[558px]">
+    <div class="flex flex-col gap-4 w-full h-[658px]">
       <div class="flex flex-row justify-between">
         <div class="flex flex-col">
           <Text variant="heading" class="!font-normal">
@@ -36,13 +36,15 @@ export default function ApiDashboard ({ dataset, p50Latency, p90Latency, p95Late
         <a href={statusPageUrl}>
           <Icon
             id="external-link"
+            class="hover:text-base-700"
+            strokeWidth={1}
             size={24}
           />
         </a>
       </div>
       <TimeSeries
         dataset={dataset}
-        class="h-[400px] w-full h-full"
+        class="h-[500px] w-full h-full"
         optionsConfig={optionsConfig}
       />
       <div class="flex flex-row gap-4 w-full">

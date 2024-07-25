@@ -27,7 +27,7 @@ export default function PlotData(
         <div class="flex flex-row gap-1">
           <Text variant="body-regular" tone="base-500">Error rate: </Text>
           <Text variant="body-regular" tone="base-500">
-            {(errorRate.lastHour * 100).toFixed(2)}%
+            {(errorRate.lastHour * 100).toFixed(3)}%
           </Text>
         </div>
         <div class="flex flex-row gap-1">
@@ -66,9 +66,9 @@ export default function PlotData(
         </div>
       </div>
       <div class="flex flex-row gap-6 w-full">
-        <div class="flex flex-col gap-4 w-[230px]">
+        <div class="flex flex-col gap-4 w-[245px]">
           {apis.map((api) => (
-            <button class={`flex flex-row gap-3 p-2 items-center w-full rounded-lg
+            <button class={`flex flex-row gap-[6px] p-3 items-center w-full rounded-lg
               ${selectedApi.value === api.metadata.name ? "bg-base-200" : ""}
               `} 
               onClick={() => {
