@@ -49,7 +49,8 @@ export type AvailableIcons =
   | "circle-check"
   | "deco-cx"
   | "status-dot"
-  | "alert-circle";
+  | "alert-circle"
+  | "external-link";
 
 interface Props extends JSX.SVGAttributes<SVGSVGElement> {
   /**

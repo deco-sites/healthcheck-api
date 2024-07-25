@@ -4,7 +4,8 @@
 
 import * as $$$$$$$$$$$0 from "./apps/decohub.ts";
 import * as $$$$$$$$$$$1 from "./apps/site.ts";
-import * as $$$0 from "./loaders/Hyperdx.ts";
+import * as $$$0 from "./loaders/ApisLatency.ts";
+import * as $$$1 from "./loaders/Hyperdx.ts";
 import * as $$$$$$0 from "./sections/BlogPost.tsx";
 import * as $$$$$$1 from "./sections/BlogPosts.tsx";
 import * as $$$$$$2 from "./sections/DesignSystem.tsx";
@@ -21,7 +22,8 @@ import * as $$$$$$12 from "./sections/Theme/Theme.tsx";
 
 const manifest = {
   "loaders": {
-    "site/loaders/Hyperdx.ts": $$$0,
+    "site/loaders/ApisLatency.ts": $$$0,
+    "site/loaders/Hyperdx.ts": $$$1,
   },
   "sections": {
     "site/sections/BlogPost.tsx": $$$$$$0,

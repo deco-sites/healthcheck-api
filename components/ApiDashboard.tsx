@@ -5,12 +5,8 @@ import {
   Dataset,
   getHyperdxOptionsConfig,
 } from "../utils/charts.ts";
-
-
-export interface CompareMetric {
-  lastHour: number;
-  twoHoursAgo: number;
-}
+import { CompareMetric } from "../loaders/ApisLatency.ts";
+import Icon from "./ui/Icon.tsx";
 
 export interface ApiDashboardProps {
   dataset: Dataset;
@@ -19,21 +15,30 @@ export interface ApiDashboardProps {
   p95Latency: CompareMetric;
   p99Latency: CompareMetric;
   isDarkMode: boolean;
+  statusPageUrl: string;
 }
 
-export default function ApiDashboard ({ dataset, p50Latency, p90Latency, p95Latency, p99Latency, isDarkMode }: ApiDashboardProps) {
+export default function ApiDashboard ({ dataset, p50Latency, p90Latency, p95Latency, p99Latency, isDarkMode, statusPageUrl }: ApiDashboardProps) {
   const optionsConfig = getHyperdxOptionsConfig(
     isDarkMode,
   );
   return (
     <div class="flex flex-col gap-4 w-full h-[558px]">
-      <div class="flex flex-col">
-        <Text variant="heading" class="!font-normal">
-          Latency
-        </Text>
-        <Text tone="base-500" variant="body-regular">
-          Latency in miliseconds for VTEX requests passing through deco.cx
-        </Text>
+      <div class="flex flex-row justify-between">
+        <div class="flex flex-col">
+          <Text variant="heading" class="!font-normal">
+            Latency
+          </Text>
+          <Text tone="base-500" variant="body-regular">
+            Latency in miliseconds for VTEX requests passing through deco.cx
+          </Text>
+        </div>
+        <a href={statusPageUrl}>
+          <Icon
+            id="external-link"
+            size={24}
+          />
+        </a>
       </div>
       <TimeSeries
         dataset={dataset}
