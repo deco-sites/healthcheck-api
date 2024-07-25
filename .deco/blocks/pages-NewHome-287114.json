@@ -6,17 +6,7 @@
       "__resolveType": "site/sections/DesignSystem.tsx"
     },
     {
-      "__resolveType": "site/sections/PlotData.tsx",
-      "data": {
-        "__resolveType": "site/loaders/Hyperdx.ts",
-        "granularity": "1 minute",
-        "timeRange": "2",
-        "apiKey": {
-          "__resolveType": "website/loaders/secret.ts",
-          "name": "HYPERDX_APIKEY",
-          "encrypted": "d51416bd0f6f5ab78e7b1a47db5cf906a6f358b69cc56257de91c6f3d347d37dd8ced330c07d5cabeceebcb3e5c40aa9"
-        }
-      }
+      "__resolveType": "ApiDashboard"
     }
   ],
   "seo": {

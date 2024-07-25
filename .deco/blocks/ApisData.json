@@ -1,0 +1,51 @@
+{
+  "__resolveType": "site/loaders/ApisLatency.ts",
+  "apis": [
+    {
+      "data": {
+        "__resolveType": "Preview site/loaders/Hyperdx.ts"
+      },
+      "name": "VTEX",
+      "metadata": {
+        "name": "VTEX",
+        "statusUrl": "https://status.vtex.com",
+        "imgSrc": "https://ozksgdmyrqcxcwhnbepg.supabase.co/storage/v1/object/public/assets/10965/90b5fce0-ed10-45fb-9814-e4b66725c270",
+        "statusPageUrl": "https://status.vtex.com/"
+      }
+    },
+    {
+      "data": {
+        "__resolveType": "site/loaders/Hyperdx.ts",
+        "granularity": "1 minute",
+        "timeRange": "2",
+        "query": "api.vnda",
+        "apiKey": {
+          "__resolveType": "website/loaders/secret.ts",
+          "encrypted": "d51416bd0f6f5ab78e7b1a47db5cf906a6f358b69cc56257de91c6f3d347d37dd8ced330c07d5cabeceebcb3e5c40aa9",
+          "name": "HYPERDX_APIKEY"
+        }
+      },
+      "name": "Vnda",
+      "metadata": {
+        "name": "Vnda",
+        "statusUrl": "https://status.vnda.com.br",
+        "imgSrc": "https://ozksgdmyrqcxcwhnbepg.supabase.co/storage/v1/object/public/assets/10965/1dcefc03-b1bf-4fa2-8a7e-1cc3e4bb7a9d",
+        "statusPageUrl": "https://status.vnda.com.br/"
+      }
+    }
+  ],
+  "vtexData": {
+    "__resolveType": "Preview site/loaders/Hyperdx.ts"
+  },
+  "shopifyData": {
+    "__resolveType": "site/loaders/Hyperdx.ts",
+    "granularity": "1 minute",
+    "timeRange": "2",
+    "apiKey": {
+      "__resolveType": "website/loaders/secret.ts",
+      "encrypted": "6dc666960b426a08abffd3ffc2187c8336d1aac9b93860bed065156b71b6ed7a0df780717a7c7c01bebe46c498ddca14",
+      "name": "HYPERDX_APIKEY"
+    },
+    "query": "shopify"
+  }
+}

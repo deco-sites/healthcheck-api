@@ -157,5 +157,17 @@
     "path": "/dev",
     "blockType": "pages",
     "__resolveType": "website/pages/Page.tsx"
+  },
+  "/.deco/blocks/ApisData.json": {
+    "blockType": "loaders",
+    "__resolveType": "site/loaders/ApisLatency.ts"
+  },
+  "/.deco/blocks/Preview%20%2Fsections%2FPlotData.tsx.json": {
+    "blockType": "sections",
+    "__resolveType": "site/sections/PlotData.tsx"
+  },
+  "/.deco/blocks/ApiDashboard.json": {
+    "blockType": "sections",
+    "__resolveType": "site/sections/PlotData.tsx"
   }
 }
