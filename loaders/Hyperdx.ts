@@ -23,10 +23,11 @@ export type Granularity =
   | "30 day";
 
 const getRequestBody = (
-  { startTime, endTime, granularity }: {
+  { startTime, endTime, granularity, query }: {
     startTime: number;
     endTime: number;
     granularity?: Granularity;
+    query: string;
   },
 ) => {
   return {
@@ -34,35 +35,35 @@ const getRequestBody = (
       {
         "dataSource": "events",
         "aggFn": "count",
-        "where": "vtexcommercestable -fastly.decocache",
+        "where": query,
         "groupBy": ["level"],
       },
       {
         "dataSource": "events",
         "aggFn": "p50",
         "field": "duration",
-        "where": "vtexcommercestable -fastly.decocache",
+        "where": query,
         "groupBy": ["level"],
       },
       {
         "dataSource": "events",
         "aggFn": "p90",
         "field": "duration",
-        "where": "vtexcommercestable -fastly.decocache",
+        "where": query,
         "groupBy": ["level"],
       },
       {
         "dataSource": "events",
         "aggFn": "p95",
         "field": "duration",
-        "where": "vtexcommercestable -fastly.decocache",
+        "where": query,
         "groupBy": ["level"],
       },
       {
         "dataSource": "events",
         "aggFn": "p99",
         "field": "duration",
-        "where": "vtexcommercestable -fastly.decocache",
+        "where": query,
         "groupBy": ["level"],
       },
     ],
@@ -91,18 +92,20 @@ interface Props {
   granularity?: Granularity;
   timeRange?: "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10";
   apiKey?: Secret;
+  query: string;
 }
 
 export default async function loader(
-  { granularity, timeRange, apiKey }: Props,
+  { granularity, timeRange, apiKey, query }: Props,
 ): Promise<HyperdxData[]> {
   const response = await fetch(encodeURI(path), {
     method: "POST",
     body: JSON.stringify(
       getRequestBody({
-        "startTime": new Date().getTime() - (Number(timeRange) ?? 2) * HOUR,
-        "endTime": new Date().getTime(),
-        "granularity": granularity,
+        startTime: new Date().getTime() - (Number(timeRange) ?? 2) * HOUR,
+        endTime: new Date().getTime(),
+        granularity,
+        query,
       }),
     ),
     headers: {

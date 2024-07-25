@@ -14,7 +14,8 @@ export type Variant =
   | "body-regular"
   | "caption-strong"
   | "caption-regular"
-  | "body-regular-10";
+  | "body-regular-10"
+  | "medium-20";
 
 const variants: Record<Variant, `text-${Variant} font-${Variant}`> = {
   "hero-large": "text-hero-large font-hero-large",
@@ -28,6 +29,7 @@ const variants: Record<Variant, `text-${Variant} font-${Variant}`> = {
   "caption-strong": "text-caption-strong font-caption-strong",
   "caption-regular": "text-caption-regular font-caption-regular",
   "body-regular-10": "text-body-regular-10 font-body-regular-10",
+  "medium-20": "text-medium-20 font-medium-20",
 };
 
 export type Tone =

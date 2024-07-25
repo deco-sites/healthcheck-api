@@ -1,37 +1,26 @@
-import TimeSeries from "../islands/TimeSeries.tsx";
 import {
   Dataset,
   getDatasetFromHyperdxData,
-  getHyperdxOptionsConfig,
 } from "../utils/charts.ts";
-import Text from "../components/ui/Text.tsx";
 import { HyperdxData } from "../loaders/Hyperdx.ts";
-import Image from "apps/website/components/Image.tsx";
-import Icon from "../components/ui/Icon.tsx";
+import { CompareMetric } from "../components/ApiDashboard.tsx";
+import PlotDataIsland from "../islands/PlotDataIsland.tsx";
 
 const isDarkMode = true;
 
 interface LoaderProps {
   data: HyperdxData[];
-  imgSrc: string;
 }
 
-interface CompareMetric {
-  lastHour: number;
-  twoHoursAgo: number;
-}
-
-interface ComponentProps {
+export interface ComponentProps {
   dataset: Dataset;
   p50Latency: CompareMetric;
   p90Latency: CompareMetric;
   p95Latency: CompareMetric;
   p99Latency: CompareMetric;
-  imgSrc: string;
-  status: "operational" | "degraded";
 }
 
-export function loader({ data, imgSrc }: LoaderProps): ComponentProps {
+export function loader({ data }: LoaderProps): ComponentProps {
   const totalRequestsLastHour = data.slice(0, 60).reduce(
     (acc, item) => acc + item.requests.ok + item.requests.error,
     0,
@@ -40,16 +29,6 @@ export function loader({ data, imgSrc }: LoaderProps): ComponentProps {
     (acc, item) => acc + item.requests.ok + item.requests.error,
     0,
   );
-  const totalRequestsFiveMinutes = data.slice(0, 5).reduce(
-    (acc, item) => acc + item.requests.ok + item.requests.error,
-    0,
-  );
-
-  const fiveMinutesLatency = data.slice(0, 5).reduce(
-    (acc, item) =>
-      acc + item.latency.p50 * (item.requests.ok + item.requests.error),
-    0,
-  ) / totalRequestsFiveMinutes;
 
   const p50Latency: CompareMetric = {
     lastHour: data.slice(0, 60).reduce(
@@ -104,177 +83,30 @@ export function loader({ data, imgSrc }: LoaderProps): ComponentProps {
   };
 
   return {
-    imgSrc,
     dataset: getDatasetFromHyperdxData(data.slice(0, 60), isDarkMode),
     p50Latency,
     p90Latency,
     p95Latency,
     p99Latency,
-    status: fiveMinutesLatency / p50Latency.lastHour > 1.5
-      ? "degraded"
-      : "operational",
   };
 }
 
 export default function PlotData(
   {
-    imgSrc,
     dataset,
     p50Latency,
     p90Latency,
     p95Latency,
     p99Latency,
-    status,
   }: ComponentProps,
 ) {
-  const optionsConfig = getHyperdxOptionsConfig(
-    isDarkMode,
-  );
-  const MetricCard = (
-    { description, data, lastData, class: _IconClass }: {
-      description: string;
-      data: number;
-      lastData: number;
-      class: string;
-    },
-  ) => {
-    const increase = data > lastData;
-    const percent = (Math.abs((data - lastData) / lastData * 100)).toFixed(0);
-    return (
-      <div class="flex flex-col gap-2 p-4 bg-base-100 rounded-lg w-[200px]">
-        <div class="flex flex-row gap-1 items-center">
-          <Icon
-            id="status-dot"
-            size={16}
-            class={_IconClass}
-          />
-          <Text variant="body-regular">{description}</Text>
-        </div>
-        <Text variant="display">
-          {data.toFixed(2)}ms
-        </Text>
-        <div class="flex flex-row gap-1">
-          <Icon
-            id={increase ? "trending-up" : "trending-down"}
-            size={16}
-            class={`${increase ? "text-critical-900" : "text-positive-900"}`}
-          />
-          <Text
-            variant="body-regular-10"
-            tone={increase ? "critical-900" : "positive-900"}
-          >
-            {percent}% {increase ? "more" : "less"} than 2 hours ago
-          </Text>
-        </div>
-      </div>
-    );
-  };
   return (
-    <div class="bg-base-000 px-[120px] py-10 flex flex-col gap-6">
-      <div class="flex flex-row justify-between">
-        <Text variant="hero-large" class="!font-normal">
-          API Healthcheck
-        </Text>
-        <div class="flex gap-1 items-center">
-          <Text variant="body-regular-10" tone="base-700">
-            Powered by
-          </Text>
-          <Icon
-            id="deco-cx"
-            width={40}
-            height={11}
-            class="text-base-700"
-          />
-        </div>
-      </div>
-      <div class="flex flex-row w-full justify-between items-center">
-        <div class="flex flex-row gap-3 h-12">
-          <Image
-            src={imgSrc}
-            class="rounded-lg"
-            width={48}
-            height={48}
-          />
-          <div class="flex flex-col">
-            <Text variant="heading" class="!font-medium">
-              VTEX
-            </Text>
-            <a href="https://status.vtex.com/">
-              <Text variant="body-regular">
-                https://status.vtex.com/
-              </Text>
-            </a>
-          </div>
-        </div>
-        <div
-          class={`flex flex-col gap-2 rounded-lg p-4 w-full max-w-[200px] ${
-            status === "operational" ? "bg-positive-100" : "bg-critical-100"
-          }`}
-        >
-          <Text variant="body-regular">
-            Status
-          </Text>
-          <div class="flex flex-row gap-2 items-center">
-            <Icon
-              id={status === "operational" ? "circle-check" : "alert-circle"}
-              size={16}
-              class={status === "operational"
-                ? "text-positive-800"
-                : "text-critical-900"}
-            />
-            <Text
-              variant="body-strong"
-              tone={status === "operational" ? "positive-900" : "critical-900"}
-            >
-              {status === "operational" ? "Fully operational" : "Degraded"}
-            </Text>
-          </div>
-        </div>
-      </div>
-
-      <div class="flex flex-row gap-10 max-h-[500px]">
-        <div class="flex flex-col gap-4 w-full">
-          <div class="flex flex-col">
-            <Text variant="heading" class="!font-normal">
-              Latency
-            </Text>
-            <Text tone="base-500" variant="body-regular">
-              Latency in miliseconds for VTEX requests passing through deco.cx
-            </Text>
-          </div>
-          <TimeSeries
-            dataset={dataset}
-            class="h-[400px] w-full h-full"
-            optionsConfig={optionsConfig}
-          />
-        </div>
-        <div class="flex flex-col gap-4">
-          <MetricCard
-            description="Latency P50"
-            data={p50Latency.lastHour}
-            lastData={p50Latency.twoHoursAgo}
-            class="text-[#7857FF]"
-          />
-          <MetricCard
-            description="Latency P90"
-            data={p90Latency.lastHour}
-            lastData={p90Latency.twoHoursAgo}
-            class="text-[#2FD080]"
-          />
-          <MetricCard
-            description="Latency P95"
-            data={p95Latency.lastHour}
-            lastData={p95Latency.twoHoursAgo}
-            class="text-[#FF6E6E]"
-          />
-          <MetricCard
-            description="Latency P99"
-            data={p99Latency.lastHour}
-            lastData={p99Latency.twoHoursAgo}
-            class="text-[#FFA300]"
-          />
-        </div>
-      </div>
-    </div>
-  );
+    <PlotDataIsland
+      dataset={dataset}
+      p50Latency={p50Latency}
+      p90Latency={p90Latency}
+      p95Latency={p95Latency}
+      p99Latency={p99Latency}
+    />
+  )
 }
