@@ -21,7 +21,8 @@ export default function PlotData(
 
   const ErrorRate = ({ errorRate } : { errorRate: CompareMetric }) => {
     const increase = errorRate.lastHour > errorRate.twoHoursAgo;
-    const percent = Math.abs((errorRate.lastHour - errorRate.twoHoursAgo) / errorRate.twoHoursAgo * 100);
+    const percent = errorRate.twoHoursAgo === 0 ? 0 
+      : Math.abs((errorRate.lastHour - errorRate.twoHoursAgo) / errorRate.twoHoursAgo * 100);
     return (
       <div class="flex flex-col">
         <div class="flex flex-row gap-1">
