@@ -9,7 +9,7 @@ import { ApisProps, CompareMetric } from "../loaders/ApisLatency.ts";
 const isDarkMode = true;
 
 export default function PlotData(
-  { apisData } : { apisData: ApisProps }
+  { apisData }: { apisData: ApisProps },
 ) {
   const { apis } = apisData;
   const selectedApi = useSignal<string>("VTEX");
@@ -19,14 +19,16 @@ export default function PlotData(
     data.set(api.metadata.name, api);
   });
 
-  const ErrorRate = ({ errorRate } : { errorRate: CompareMetric }) => {
+  const ErrorRate = ({ errorRate }: { errorRate: CompareMetric }) => {
     const increase = errorRate.lastHour > errorRate.twoHoursAgo;
-    const percent = errorRate.twoHoursAgo === 0 ? 0 
-      : Math.abs((errorRate.lastHour - errorRate.twoHoursAgo) / errorRate.twoHoursAgo * 100);
+    const percent = errorRate.twoHoursAgo === 0 ? 0 : Math.abs(
+      (errorRate.lastHour - errorRate.twoHoursAgo) / errorRate.twoHoursAgo *
+        100,
+    );
     return (
       <div class="flex flex-col">
         <div class="flex flex-row gap-1">
-          <Text variant="body-regular" tone="base-500">Error rate: </Text>
+          <Text variant="body-regular" tone="base-500">Error rate:</Text>
           <Text variant="body-regular" tone="base-500">
             {(errorRate.lastHour * 100).toFixed(3)}%
           </Text>
@@ -41,12 +43,13 @@ export default function PlotData(
             variant="body-regular-10"
             tone={increase ? "critical-900" : "positive-900"}
           >
-            {isNaN(percent) ? 0.0 : percent.toFixed(0)}% {increase ? "more" : "less"}
+            {isNaN(percent) ? 0.0 : percent.toFixed(0)}%{" "}
+            {increase ? "more" : "less"}
           </Text>
         </div>
       </div>
     );
-  }
+  };
 
   return (
     <div class="bg-base-000 px-[120px] py-10 flex flex-col gap-10">
@@ -69,13 +72,14 @@ export default function PlotData(
       <div class="flex flex-row gap-6 w-full">
         <div class="flex flex-col gap-4 w-[245px]">
           {apis.map((api) => (
-            <button class={`flex flex-row gap-[6px] p-3 items-center w-full rounded-lg
+            <button
+              class={`flex flex-row gap-[6px] p-3 items-center w-full rounded-lg
               ${selectedApi.value === api.metadata.name ? "bg-base-200" : ""}
-              `} 
+              `}
               onClick={() => {
                 selectedApi.value = api.metadata.name;
-              }
-            }>
+              }}
+            >
               <Image
                 src={api.metadata.imgSrc}
                 class="rounded-lg"
@@ -86,10 +90,8 @@ export default function PlotData(
                 <Text variant="medium-20" class="!font-medium">
                   {api.metadata.name}
                 </Text>
-                {
-                  selectedApi.value === api.metadata.name &&
-                  <ErrorRate errorRate={api.errorRate} />
-                }
+                {selectedApi.value === api.metadata.name &&
+                  <ErrorRate errorRate={api.errorRate} />}
               </div>
             </button>
           ))}

@@ -1,8 +1,5 @@
 import { HyperdxData } from "./Hyperdx.ts";
-import {
-  Dataset,
-  getDatasetFromHyperdxData,
-} from "../utils/charts.ts";
+import { Dataset, getDatasetFromHyperdxData } from "../utils/charts.ts";
 
 const isDarkMode = true;
 
@@ -34,15 +31,23 @@ export interface ApisProps {
 }
 
 function parse(metadata: ApiMetadata, data: HyperdxData[]): ApiProps {
-  const totalErrorsLastHour = data.slice(0, 60).reduce((acc, item) => acc + item.requests.error, 0);
-  const totalErrorsTwoHoursAgo = data.slice(60, 120).reduce((acc, item) => acc + item.requests.error, 0);
+  const totalErrorsLastHour = data.slice(0, 60).reduce(
+    (acc, item) => acc + item.requests.error,
+    0,
+  );
+  const totalErrorsTwoHoursAgo = data.slice(60, 120).reduce(
+    (acc, item) => acc + item.requests.error,
+    0,
+  );
 
   const totalRequestsLastHour = data.slice(0, 60).reduce(
-    (acc, item) => acc + item.requests.ok * SAMPLING_FACTOR + item.requests.error,
+    (acc, item) =>
+      acc + item.requests.ok * SAMPLING_FACTOR + item.requests.error,
     0,
   );
   const totalRequestsTwoHoursAgo = data.slice(60, 120).reduce(
-    (acc, item) => acc + item.requests.ok * SAMPLING_FACTOR + item.requests.error,
+    (acc, item) =>
+      acc + item.requests.ok * SAMPLING_FACTOR + item.requests.error,
     0,
   );
 
@@ -54,12 +59,16 @@ function parse(metadata: ApiMetadata, data: HyperdxData[]): ApiProps {
   const p50Latency: CompareMetric = {
     lastHour: data.slice(0, 60).reduce(
       (acc, item) =>
-        acc + item.latency.p50 * (item.requests.ok * SAMPLING_FACTOR + item.requests.error),
+        acc +
+        item.latency.p50 *
+          (item.requests.ok * SAMPLING_FACTOR + item.requests.error),
       0,
     ) / totalRequestsLastHour,
     twoHoursAgo: data.slice(60, 120).reduce(
       (acc, item) =>
-        acc + item.latency.p50 * (item.requests.ok * SAMPLING_FACTOR + item.requests.error),
+        acc +
+        item.latency.p50 *
+          (item.requests.ok * SAMPLING_FACTOR + item.requests.error),
       0,
     ) / totalRequestsTwoHoursAgo,
   };
@@ -67,12 +76,16 @@ function parse(metadata: ApiMetadata, data: HyperdxData[]): ApiProps {
   const p90Latency: CompareMetric = {
     lastHour: data.slice(0, 60).reduce(
       (acc, item) =>
-        acc + item.latency.p90 * (item.requests.ok * SAMPLING_FACTOR + item.requests.error),
+        acc +
+        item.latency.p90 *
+          (item.requests.ok * SAMPLING_FACTOR + item.requests.error),
       0,
     ) / totalRequestsLastHour,
     twoHoursAgo: data.slice(60, 120).reduce(
       (acc, item) =>
-        acc + item.latency.p90 * (item.requests.ok * SAMPLING_FACTOR + item.requests.error),
+        acc +
+        item.latency.p90 *
+          (item.requests.ok * SAMPLING_FACTOR + item.requests.error),
       0,
     ) / totalRequestsTwoHoursAgo,
   };
@@ -80,12 +93,16 @@ function parse(metadata: ApiMetadata, data: HyperdxData[]): ApiProps {
   const p95Latency: CompareMetric = {
     lastHour: data.slice(0, 60).reduce(
       (acc, item) =>
-        acc + item.latency.p95 * (item.requests.ok * SAMPLING_FACTOR + item.requests.error),
+        acc +
+        item.latency.p95 *
+          (item.requests.ok * SAMPLING_FACTOR + item.requests.error),
       0,
     ) / totalRequestsLastHour,
     twoHoursAgo: data.slice(60, 120).reduce(
       (acc, item) =>
-        acc + item.latency.p95 * (item.requests.ok * SAMPLING_FACTOR + item.requests.error),
+        acc +
+        item.latency.p95 *
+          (item.requests.ok * SAMPLING_FACTOR + item.requests.error),
       0,
     ) / totalRequestsTwoHoursAgo,
   };
@@ -93,12 +110,16 @@ function parse(metadata: ApiMetadata, data: HyperdxData[]): ApiProps {
   const p99Latency: CompareMetric = {
     lastHour: data.slice(0, 60).reduce(
       (acc, item) =>
-        acc + item.latency.p99 * (item.requests.ok * SAMPLING_FACTOR + item.requests.error),
+        acc +
+        item.latency.p99 *
+          (item.requests.ok * SAMPLING_FACTOR + item.requests.error),
       0,
     ) / totalRequestsLastHour,
     twoHoursAgo: data.slice(60, 120).reduce(
       (acc, item) =>
-        acc + item.latency.p99 * (item.requests.ok * SAMPLING_FACTOR + item.requests.error),
+        acc +
+        item.latency.p99 *
+          (item.requests.ok * SAMPLING_FACTOR + item.requests.error),
       0,
     ) / totalRequestsTwoHoursAgo,
   };
@@ -118,7 +139,7 @@ export interface Props {
   apis: {
     metadata: ApiMetadata;
     data: HyperdxData[];
-  }[]
+  }[];
 }
 
 export default function loader(

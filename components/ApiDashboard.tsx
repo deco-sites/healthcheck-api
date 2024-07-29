@@ -1,10 +1,7 @@
 import Text from "./ui/Text.tsx";
 import TimeSeries from "../islands/TimeSeries.tsx";
 import MetricCard from "./MetricCard.tsx";
-import {
-  Dataset,
-  getHyperdxOptionsConfig,
-} from "../utils/charts.ts";
+import { Dataset, getHyperdxOptionsConfig } from "../utils/charts.ts";
 import { CompareMetric } from "../loaders/ApisLatency.ts";
 import Icon from "./ui/Icon.tsx";
 
@@ -18,7 +15,17 @@ export interface ApiDashboardProps {
   statusPageUrl: string;
 }
 
-export default function ApiDashboard ({ dataset, p50Latency, p90Latency, p95Latency, p99Latency, isDarkMode, statusPageUrl }: ApiDashboardProps) {
+export default function ApiDashboard(
+  {
+    dataset,
+    p50Latency,
+    p90Latency,
+    p95Latency,
+    p99Latency,
+    isDarkMode,
+    statusPageUrl,
+  }: ApiDashboardProps,
+) {
   const optionsConfig = getHyperdxOptionsConfig(
     isDarkMode,
   );

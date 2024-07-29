@@ -8,7 +8,7 @@ export interface MetricCardProps {
   class: string;
 }
 
-export default function MetricCard (
+export default function MetricCard(
   { description, data, lastData, class: _IconClass }: MetricCardProps,
 ) {
   const increase = data > lastData;
@@ -41,4 +41,4 @@ export default function MetricCard (
       </div>
     </div>
   );
-};
+}

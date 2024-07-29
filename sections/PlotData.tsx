@@ -6,11 +6,11 @@ export interface Props {
 }
 
 export default function PlotData(
-  { data } : Props,
+  { data }: Props,
 ) {
   return (
     <PlotDataIsland
       apisData={data}
     />
-  )
+  );
 }
