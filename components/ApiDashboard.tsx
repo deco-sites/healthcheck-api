@@ -6,6 +6,8 @@ import { CompareMetric } from "../loaders/ApisLatency.ts";
 import Icon from "./ui/Icon.tsx";
 
 export interface ApiDashboardProps {
+  api: string;
+  logsVolume: number;
   dataset: Dataset;
   p50Latency: CompareMetric;
   p90Latency: CompareMetric;
@@ -17,6 +19,8 @@ export interface ApiDashboardProps {
 
 export default function ApiDashboard(
   {
+    api,
+    logsVolume,
     dataset,
     p50Latency,
     p90Latency,
@@ -37,7 +41,7 @@ export default function ApiDashboard(
             Latency
           </Text>
           <Text tone="base-500" variant="body-regular">
-            Latency in miliseconds for VTEX requests passing through deco.cx
+            {`Latency in milliseconds for ${api} requests routed through deco.cx. This dashboard is based on a dataset of ${logsVolume} logs.`}
           </Text>
         </div>
         <a href={statusPageUrl}>

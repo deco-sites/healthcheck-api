@@ -98,7 +98,9 @@ export default function PlotData(
         </div>
         <ApiDashboard
           isDarkMode={isDarkMode}
+          api={selectedApi.value}
           dataset={data.get(selectedApi.value).dataset}
+          logsVolume={data.get(selectedApi.value).logsVolume}
           p50Latency={data.get(selectedApi.value).p50Latency}
           p90Latency={data.get(selectedApi.value).p90Latency}
           p95Latency={data.get(selectedApi.value).p95Latency}

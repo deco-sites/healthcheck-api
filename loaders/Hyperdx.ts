@@ -113,7 +113,7 @@ export default async function loader(
       "Content-Type": "application/json",
     },
   });
-  const data = await response.json();
+  const data: any = await response.json();
   const map = new Map<number, HyperdxData>();
   data.data?.forEach(
     (item: { [x: string]: any; ts_bucket: any; group: any[] }) => {

@@ -24,6 +24,7 @@ export interface ApiProps {
   p95Latency: CompareMetric;
   p99Latency: CompareMetric;
   errorRate: CompareMetric;
+  logsVolume: number;
 }
 
 export interface ApisProps {
@@ -124,6 +125,11 @@ function parse(metadata: ApiMetadata, data: HyperdxData[]): ApiProps {
     ) / totalRequestsTwoHoursAgo,
   };
 
+  const logsVolume = data.reduce(
+    (acc, item) => acc + item.requests.ok + item.requests.error,
+    0,
+  );
+
   return {
     metadata,
     dataset: getDatasetFromHyperdxData(data.slice(0, 60), isDarkMode),
@@ -132,6 +138,7 @@ function parse(metadata: ApiMetadata, data: HyperdxData[]): ApiProps {
     p90Latency,
     p95Latency,
     p99Latency,
+    logsVolume,
   };
 }
 
