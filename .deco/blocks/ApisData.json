@@ -32,6 +32,24 @@
         "imgSrc": "https://ozksgdmyrqcxcwhnbepg.supabase.co/storage/v1/object/public/assets/10965/1dcefc03-b1bf-4fa2-8a7e-1cc3e4bb7a9d",
         "statusPageUrl": "https://status.vnda.com.br/"
       }
+    },
+    {
+      "metadata": {
+        "name": "Wake",
+        "statusPageUrl": " ",
+        "imgSrc": "https://ozksgdmyrqcxcwhnbepg.supabase.co/storage/v1/object/public/assets/10965/8cc1d9ec-7441-4e9e-a0fd-3be881260bff"
+      },
+      "data": {
+        "__resolveType": "site/loaders/Hyperdx.ts",
+        "granularity": "1 minute",
+        "timeRange": "2",
+        "query": "wake",
+        "apiKey": {
+          "__resolveType": "website/loaders/secret.ts",
+          "encrypted": "d51416bd0f6f5ab78e7b1a47db5cf906a6f358b69cc56257de91c6f3d347d37dd8ced330c07d5cabeceebcb3e5c40aa9",
+          "name": "HYPERDX_APIKEY"
+        }
+      }
     }
   ],
   "vtexData": {
